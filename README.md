@@ -1,46 +1,51 @@
 # Agnes Video Generator - Clean Independent Version
 
+**New clean repo created:** https://github.com/lamhui763-sys/Agnes-video-generator-clean
+
 This is a **clean, independent** version of the Agnes Video Generator, fully detached from Google AI Studio control and Firebase free-tier limitations.
 
-## Key Changes from Original (Agnes-video-generator-lastest)
+## Status
 
-- Removed / neutralized AI Studio specific Firebase config (`gen-lang-client-*` project + named database `ai-studio-remixagnesvideog-...`)
-- **All Firestore writes are disabled by default** to prevent `RESOURCE_EXHAUSTED` errors on free tier
-- Primary persistence: **localStorage** + **Catbox** (for permanent media hosting)
-- No dependency on AI Studio applet config or remix features
-- Cleaner structure ready for Railway / self-hosted deployment
+Core config files + cleaned Firebase setup have been added.
 
-## Features
+**To complete the full migration** (recommended way, fastest):
 
-- AI video generation pipeline (Agnes / Gemini based)
-- Scene management, keyframe control, image-to-video
-- Experience library & failure records (local only)
-- Catbox permanent upload for generated assets
-- Auth optional (can run without Firebase Auth)
+1. On your local machine (or Codespace):
+   ```bash
+   git clone https://github.com/lamhui763-sys/Agnes-video-generator-lastest.git
+   cd Agnes-video-generator-lastest
+   git remote set-url origin https://github.com/lamhui763-sys/Agnes-video-generator-clean.git
+   # Optional: remove AI Studio specific files
+   rm -rf assets/.aistudio firebase-applet-config.json firebase-blueprint.json firestore.rules
+   # Apply the disable writes if not already in code
+   # Then force push the cleaned code
+   git push -u origin main --force
+   ```
+
+Or use GitHub's "Import repository" feature pointing to the original.
+
+## Key Cleanups Applied / To Apply
+
+- Removed AI Studio Firebase config hardcoding (`gen-lang-client` + named database)
+- `src/lib/firebase.ts` rewritten to be optional + use default DB (no named databaseId)
+- Firestore writes should remain disabled (see original `fix_disable_firestore_writes.cjs`)
+- localStorage + Catbox as primary persistence
+- Removed prebuild fix scripts dependency from package.json
+- Updated titles and comments for independent use
 
 ## Run Locally
 
 **Prerequisites:** Node.js 20+
 
-1. Clone this repo
+1. Clone this repo (after full code is in)
 2. `npm install`
-3. Copy `.env.example` to `.env` / `.env.local` and set:
-   - `GEMINI_API_KEY=your_key`
-   - Other keys as needed (Catbox, etc.)
+3. Copy `.env.example` to `.env` and set your keys
 4. `npm run dev`
 
 ## Deploy to Railway
 
-1. Connect this repo to Railway
-2. Set environment variables
-3. Deploy (uses Dockerfile or `npm start` after build)
-
-## Notes
-
-- Original source: `lamhui763-sys/Agnes-video-generator-lastest`
-- This repo is intentionally cleaned for production independence.
-- Temporary fix scripts from the original development process are excluded.
+Connect this repo → set env vars (GEMINI_API_KEY, AGNES_API_KEY, CATBOX_USERHASH, etc.) → Deploy.
 
 ---
 
-Made for independent deployment outside AI Studio.
+Original (do not modify yet): https://github.com/lamhui763-sys/Agnes-video-generator-lastest
